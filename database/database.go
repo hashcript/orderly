@@ -16,7 +16,7 @@ var DB *gorm.DB
 // Open the database and establish the connection
 func Init() *gorm.DB {
 	// Specify the connection properties for the MySQL database
-	dsn := "colls:djsjsjsoewe88wSSDDF.Sf*@tcp(localhost:3306)/orderly?charset=utf8mb4&parseTime=True&loc=Local" //prod
+	dsn := "colls:1234@tcp(localhost:3306)/orderly?charset=utf8mb4&parseTime=True&loc=Local" //prod
 	// dsn := "colls:1234@tcp(localhost:3306)/orderly?charset=utf8mb4&parseTime=True&loc=Local" //dev
 
 	// Replace 'docker:docker' with your MySQL username and password
