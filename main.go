@@ -35,7 +35,7 @@ func main() {
 	items.Create(sun.Group("/items"))
 	orders.Create(sun.Group("/orders"))
 	//port 8080
-	if err := router.Run(":8080"); err != nil {
+	if err := router.Run(":8088"); err != nil {
 		panic(err)
 	}
 }
