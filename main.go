@@ -1,6 +1,7 @@
 package main
 
 import (
+	"com.orderly/company"
 	"com.orderly/database"
 	"com.orderly/items"
 	"com.orderly/orders"
@@ -16,6 +17,7 @@ func Migration(database *gorm.DB) {
 	users.AutoMigrate()
 	items.AutoMigrate()
 	orders.AutoMigrate()
+	company.AutoMigrate()
 }
 
 func main() {
@@ -34,6 +36,7 @@ func main() {
 	users.Create(sun.Group("/users"))
 	items.Create(sun.Group("/items"))
 	orders.Create(sun.Group("/orders"))
+	company.Create(sun.Group("/company"))
 	//port 8080
 	if err := router.Run(":8088"); err != nil {
 		panic(err)

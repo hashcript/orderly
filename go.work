@@ -7,5 +7,6 @@ use (
 	./users
     ./items
     ./orders
+	./company
 
 )
