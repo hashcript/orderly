@@ -30,6 +30,8 @@ func main() {
 	// CORS configuration :updated on august 28 17:16 pm
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization	", "X-Requested-With", "Accept", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Methods"}
 	router.Use(cors.New(config))
 
 	sun := router.Group("/Api")
