@@ -1,29 +1,44 @@
 package database
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator/v10"
-	"gorm.io/driver/mysql" // Use the MySQL driver
+	"github.com/go-playground/validator"
+	driver "github.com/go-sql-driver/mysql" // this is the MySQL driver
+	"gorm.io/driver/mysql"                  // this is GORM's wrapper, keep name as-is
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-// Open the database and establish the connection
 func Init() *gorm.DB {
-	// Specify the connection properties for the MySQL database
-	dsn := "colls:1234@tcp(localhost:3306)/hotel?charset=utf8mb4&parseTime=True&loc=Local" //prod
-	// dsn := "colls:1234@tcp(localhost:3306)/orderly?charset=utf8mb4&parseTime=True&loc=Local" //dev
+	// Load Aiven CA certificate
+	rootCertPool := x509.NewCertPool()
+	pem, err := os.ReadFile("ca.pem") // Ensure this file exists
+	if err != nil {
+		log.Fatal("Failed to read CA cert:", err)
+	}
+	if ok := rootCertPool.AppendCertsFromPEM(pem); !ok {
+		log.Fatal("Failed to append PEM.")
+	}
 
-	// Replace 'docker:docker' with your MySQL username and password
-	// Replace 'localhost:3306' with your MySQL server's address and port
-	// Replace 'hospital' with your database name
+	// Register custom TLS config with go-sql-driver/mysql
+	err = driver.RegisterTLSConfig("custom", &tls.Config{
+		RootCAs: rootCertPool,
+	})
+	if err != nil {
+		log.Fatal("Failed to register TLS config:", err)
+	}
 
-	// Open the database connection.
+	// Construct DSN using the custom TLS config
+	dsn := "avnadmin:AVNS_z6fAW0ja8h5in-GeGez@tcp(mysql-365444d5-compliace.g.aivencloud.com:25391)/defaultdb?tls=custom&charset=utf8mb4&parseTime=True&loc=Local"
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to the database:", err)
